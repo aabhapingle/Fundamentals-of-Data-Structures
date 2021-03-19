@@ -1,4 +1,4 @@
-# Fundamentals-of-Data-Structures
+# Fundamentals of Data Structures Laboratory
 
 All fundamentals of data structures assignments of second year Computer Engineering Semester 3 Syllabus according to SPPU.
 
