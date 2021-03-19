@@ -1,253 +1,167 @@
-#include <iostream>
+#include<iostream>
+#include<cmath>
 using namespace std;
 
-class node{
-public:
-int seat_no;
-bool status=0;              // every slots is empty
-node *prev, *next;
-node(){             // default constructor
-    prev=next=NULL;
-}
- };
+int seat_no = 1;        // global variable seat number
+typedef struct dnode{	// doubly circular linked list node
+	int data;
+	char s;
+	struct dnode *next, *prev;
+}dnode;
 
- class ll
- {
+dnode* insert(dnode *head,int x);
+void print(dnode*);
 
-node *head[10],*tail[10];
-public:
-ll (){
-int num=1;
-    for(int i=1;i<11;i++){
-        head[i]=NULL;
-        tail[i]=NULL;
-    }
-    for(int j=1;j<11;j++){
-        for(int i=1;i<8;i++){
-            node *newnode;
-newnode=new node;
-newnode->seat_no=num;
-newnode->status=0;
-          if(head[j]==NULL){
-head[j]=newnode;
-tail[j]=newnode;
-newnode->next=head[j];
-newnode->prev=tail[j];
-num++;
-          }
-          else{
-tail[j]->next=newnode;
-newnode->prev=tail[j];
-newnode->next=head[j];
-tail[j]=newnode;
- head[j]->prev=tail[j];
-newnode->seat_no=num;
-num++;
-
-          }
-        }
-
-    }
-
+dnode* insert(dnode *head,int x){  // insert a node at the front of the list
+	dnode *p;
+	p = new dnode;
+	p->data = x;
+	p->s = 'A';
+	p->prev = p->next = NULL;
+	if(head == NULL){  // insertion in an empty list
+		p->prev = p->next = p;
+		return p;
+	}
+	else{
+		p->prev = head->prev;
+		p->next = head;
+		head->prev->next = p;
+		head->prev = p;
+		return p;
+	}
 }
 
-void display();                        //  function declaration
-void booking();
-void cancle();
- };
-
-void ll::display(){
-    node *nodeptr;
-    for(int j=1;j<11;j++){
-        nodeptr=head[j];
-        do{
-            cout<<nodeptr->seat_no<<"   ";
-
-            if(nodeptr->status==0){  // shows empty slots
-                cout<<"  (   )  ";
-            }
-            else{                     // shows booked slots
-                cout<<" (booked) ";
-            }
-            nodeptr=nodeptr->next;
-        }while(nodeptr!=head[j]);
-        cout<<endl;
-    }
+void print(dnode* head){	// print all the elements of the list
+	dnode *p;
+	p = head;
+	do{
+		cout<< p->data ;
+		cout<<'[' <<p->s << ']'<<" ";
+		p = p->next;
+	}
+	while(p!=head);
 }
 
-
-void ll::booking(){
-    int ticket, book_seat=0;
-    string name;
-    char opt;
-    int count=0;
-    cout<<"                        ---------------------------booking counter------------------------------\n";
-    cout<<"Enter your name\n";
-    cin.get();
-    getline(cin, name);
-    cout<<"How many tickets you want to book\n";
-    cin>>ticket;
-    int seat[ticket];
-   cout<<"Enter seat number you want to book\n";
-
-    for(int i=0;i<ticket;i++){
-          cin>>seat[i];
-        if(seat[i]<1){
-            cout<<"Invalid seat number\n";
-
-            return ;
-        }
-
-        if(seat[i]>70){
-            cout<<"Invalid seat number\n";
-
-            return ;
-        }
-    }
-    for(int i=0; i<ticket;  i++ ){
-        int temp;
-        for(int j=0; j<ticket-1; j++){
-            if(seat[j]>seat[j+1]){
-                temp=seat[j+1];
-                seat[j+1]=seat[j];
-                seat[j]=temp;
-            }
-        }
-    }
-    node *nodeptr;
-    for(int i=1;i<11;i++){
-        nodeptr=head[i];
-        for(int j=1;j<8;j++){
-       if(nodeptr->seat_no==seat[count] && nodeptr->status==0){
-           nodeptr->status=1;
-           count++;
-           book_seat++;
-       }
-       if(nodeptr->seat_no==seat[count] && nodeptr->status==1){
-cout<<"seat number "<<nodeptr->seat_no<<" is booked already\n ";
-           count++;
-       }
-       nodeptr=nodeptr->next;
-        }
-    }
-//     if(count != book_seat){
-//         do{
-// cout<<"Your required "<<count-book_seat<<" are not booked\n";
-// cout<<"Do you want to book another seats(y/n)\n";
-// cin>>opt;
-// if(opt=='y'){
-//     int aga_book[count - book_seat];
-//     int total=count - book_seat;
-//     int count=0;
-// book_seat=0;
-// for(int i=1;i<=count - book_seat;i++){
-// cin>>aga_book[i];
-// }
-// for(int i=1;i<11;i++){
-//         nodeptr=head[i];
-//         for(int j=1;j<8;j++){
-//        if(nodeptr->seat_no==aga_book[count] && nodeptr->status==0){
-//            nodeptr->status=1;
-//            count++;
-//            book_seat++;
-//        }
-//        if(nodeptr->seat_no==aga_book[count] && nodeptr->status==1){
-// cout<<"seat number "<<nodeptr->seat_no<<" is booked already\n ";
-//            count++;
-//        }
-//        nodeptr=nodeptr->next;
-//         }
-//     }}
-// }while(total-book_seat!=0);
-//     }
-//     else{
-    cout<<"Name: "<<name<<endl;
-    cout<<"Total ticket booked: "<<book_seat<<endl;
-    cout<<"To pay: "<<"60*"<<book_seat<<" = "<<60*book_seat<<endl;
-    cout<<"----------------------------------------------------------------------------------------------------------------\n";
-}
-//}
-
-
-void ll::cancle(){
-    int no_cancle,count=0;
-    int cancle_tic=0;
-    string name;
-    node *nodeptr;
-    cout<<"-------------------------------------Ticket Cancellation Counter-------------------------------------------------\n";
-    cout<<"Enter your name\n";
-    cin.get();
-    getline(cin,name);
-    cout<<"How many seats reservation you want to cancle\n";
-    cin>>no_cancle;
-    int cancle_seat[no_cancle];
-    cout<<"Which seat's reservation you want to cancle\n";
-    for(int i=0;i<no_cancle;i++){
-        cin>>cancle_seat[i];
-    }
-    for(int i=1;i<11;i++){
-        nodeptr=head[i];
-        for(int j=1;j<8;j++){
-            if(nodeptr->seat_no==cancle_seat[count] && nodeptr->status==0){
-                cout<<"Seat is already not reserved\n";
-                count++;
-            }
-            if(nodeptr->seat_no==cancle_seat[count] && nodeptr->status==1){
-                nodeptr->status=0;
-                cout<<"Your ticket booking is successfully cancled\n";
-                count ++;
-                cancle_tic ++;
-            }
-            nodeptr=nodeptr->next;
-        }
-
-    }
-    if(cancle_tic>0){
-    cout<<"Name: "<<name<<endl;
-    cout<<"Number of ticket cancle: "<<cancle_tic<<endl;
-    cout<<40*cancle_tic<<" rupees will get refund to your account\n";
-    cout<<"20 rupees money charges are applied\n";
-    cout<<"                           ------------------------------Thank you-------------------------------\n";
-    }
-    else{
-        cout<<"                           ------------------------------Thank you-------------------------------\n";
-    }
+int func(int num){
+	if(num >=1 && num <= 7){
+		return 0;
+	}
+	else if(num >=8 && num <= 14){
+		return 1;
+	}
+	else if(num >=15 && num <= 21){
+			return 2;
+	}
+	else if(num >=22 && num <= 28){
+			return 3;
+	}
+	else if(num >=29 && num <= 35){
+			return 4;
+	}
+	else if(num >=36 && num <= 42){
+			return 5;
+	}
+	else if(num >=43 && num <= 49){
+			return 6;
+	}
+	return -1;
 }
 
+int main(){
+	cout<<"---------------SCREEN---------------"<<endl;
 
+	dnode* arr[10]; // array for storing the head of the linked lists
+	for(int i=0; i<10 ;i++){  // make all the places NULL
+		arr[i] = NULL;
+	}
 
+	for(int k=0; k<10; k++){  // creating the theatre
+		for(int j=0; j<7; j++){  // make one row
+			arr[k] = insert(arr[k], seat_no++);
+		}
+	}
 
+	for(int l=0; l<10; l++){ // display theatre
+		print(arr[l]);
+		cout<<"\n";
+	}
 
- int main(){
-  int ch,ticket;
-  ll l1;
-  cout<<"------------------------------------Ticket Booking Centre of Cinemax Theatre-----------------------------------\n";
-  cout<<endl<<"                         ----------------------------Menu--------------------------\n";
-  do{
-      cout<<"Enter 1 to view seats\n";
-      cout<<"Enter 2 to book ticket\n";
-      cout<<"Enter 3 to cancle ticket\n";
-      cout<<"Enter 4 to exit\n";
-      cout<<"Enter your choice\n";
-cin>>ch;
-switch(ch){
-    case 1:{
-        l1.display();
-        break;
-    }
+	// menu
+	int choice = 0;
+	cout<<"\n";
+	cout<<"------MENU------"<<endl;
+	cout<<" 1.Show theater\n 2.Book tickets\n 3.Cancel tickets\n 4.Exit"<<endl;
+	cin>>choice;
+	while(choice!=4){
+		switch(choice){
+		case 1:{
+			cout<<"\n";
+			cout<<"---------------SCREEN---------------"<<endl;
+			for(int l=0; l<10; l++){ // display theatre
+				print(arr[l]);
+				cout<<"\n";
+			}
+			break;
+		}
 
-    case 2:{
-        l1.booking();
-        break;
-    }
+		case 2:{
+			int seat = 0;
+			cout<<"Enter the seat number that you want to book: ";
+			cin >> seat;
+			int f = func(seat);
+			dnode* curr = arr[f];
 
-    case 3:{
-        l1.cancle();
-        break;
-    }
+			if(f == -1){cout<<"Seat number not available !"<<endl;}
+
+			else{
+				while(curr->data != seat){
+					curr = curr->next;
+				}
+				if(curr->s == 'A'){
+					curr->s = 'B';
+					cout<<"Your seat has been booked!"<<endl;
+				}
+				else{
+					cout<<"This seat is not available!"<<endl;
+				}
+			}
+			break;
+		}
+
+		case 3:{
+			int place = 0;
+			cout<<"Enter the seat number that you want to cancel: ";
+			cin>>place;
+			int d = func(place);
+			dnode* curr = arr[d];
+			if(d == -1){cout<<"Seat number not available!"<<endl;}
+			else{
+			while(curr->data != place){
+				curr = curr->next;
+			}
+			if(curr->s == 'B'){
+				curr->s = 'A';
+				cout<<"Your booking has been cancelled !"<<endl;
+			}
+			else{
+				cout<<"This seat wasn't booked before!"<<endl;
+			}
+			}
+			break;
+		}
+
+		default:{
+			cout<<"Please enter the correct option!"<<endl;
+			break;
+		}
+		}
+		cout<<"\n";
+		cout<<"------MENU------"<<endl;
+		cout<<" 1.Show theater\n 2.Book tickets\n 3.Cancel tickets\n 4.Exit"<<endl;
+		cin>>choice;
+	}
+	cout<<"Bye bye!"<<endl;
+
+	return 0;
 }
 
-  }while(ch!=4);
-
-
- }
