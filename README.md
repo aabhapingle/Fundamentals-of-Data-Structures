@@ -11,8 +11,8 @@ All fundamentals of data structures assignments of second year Computer Engineer
 |assignment_04_b||
 |assignment_05||
 |assignment_06||
-|assignment_07||
-|assignment_08||
+|assignment_07|The ticket booking system of Cinemax theater - using Doubly circular linked list|
+|assignment_08|Set operations - using singly linked list|
 |assignment_09||
 |assignment_10||
 |assignment_11||
