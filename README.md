@@ -9,7 +9,7 @@ All fundamentals of data structures assignments of second year Computer Engineer
 |assignment_03|Operations on matrices (Python)|
 |assignment_04_a|Searching Algorithms - Linear Search and Sentinel Search (Python)|
 |assignment_04_b|Searching Algorithms - Binary Search and Fibonacci Search (Python)|
-|assignment_05|Sorting Algorithm  - Insertion Sort and Shell Sort (Python)|
+|assignment_05|Sorting Algorithms  - Insertion Sort and Shell Sort (Python)|
 |assignment_06|Sorting Algorithm  - Quick Sort (Python)|
 |assignment_07|The ticket booking system of Cinemax theater - using Doubly circular linked list (C++)|
 |assignment_08|Set operations - using singly linked list (C++)|
